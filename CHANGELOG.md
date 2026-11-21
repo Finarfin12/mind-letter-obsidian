@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.3
+
+- Settings: fixed the review-bot warning "Promise returned in function argument where a void return was expected". Every async setting handler (`onChange`, `onClick`) and every command/timer callback now goes through a small `runAsync` helper, so a failure shows a notice instead of becoming an unhandled promise rejection. No change to what any setting does.
+- Lint: `no-misused-promises` and `no-floating-promises` are now errors in the local lint, so this class of warning is caught before release.
+- Still no `skill/` folder here: the agent skill lives in [Finarfin12/mind-letter-skill](https://github.com/Finarfin12/mind-letter-skill).
+
 ## 0.1.2
 
 - The `mind-letter` agent skill moved to its own repository, [Finarfin12/mind-letter-skill](https://github.com/Finarfin12/mind-letter-skill); the `skill/` folder is removed from this repository.

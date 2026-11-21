@@ -8,7 +8,7 @@ export interface SettingItemDef {
 	searchable?: boolean;
 	keywords?: string[];
 	visible?: boolean | (() => boolean);
-	render: (setting: Setting) => void;
+	render: (setting: Setting) => unknown;
 }
 
 export interface SettingGroupDef {

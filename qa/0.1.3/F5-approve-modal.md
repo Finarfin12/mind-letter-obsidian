@@ -1,0 +1,3 @@
+# F5-approve-modal: PASS
+
+modal text: Mind LetterOptionsGeneralAppearanceInterfaceEditorFiles and linksHotkeysKeychainCore pluginsCommunity pluginsCore pluginsBacklinksCanvasCommand paletteDaily not

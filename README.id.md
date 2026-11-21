@@ -75,6 +75,8 @@ npm run lint
 npm run build  # cek tipe + bundel main.js
 ```
 
+Langkah lint menganggap `no-misused-promises` dan `no-floating-promises` sebagai error. Jalankan kerja async dari callback yang harus mengembalikan `void` dengan `runAsync(fn, onError)` (`src/run-async.ts`), jangan dengan callback `async` langsung.
+
 Logikanya ada di dua paket tanpa import Obsidian, supaya bisa dipakai antarmuka lain: `packages/core` (`@mind-letter/core`: klasifikasi, klaim, tema, temuan, penyusunan surat, memori, pemeriksaan hasil AI) dan `packages/ai` (`@mind-letter/ai`: deteksi penyedia, flag keamanan, penyedia). Plugin di `src/` hanya lapisan tipis di atasnya.
 
 ## Lisensi
