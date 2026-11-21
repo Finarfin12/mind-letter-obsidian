@@ -56,9 +56,17 @@ AI providers, in the order of the settings:
 
 Model lists come from the provider itself (`--help`, the CLI's own files, `agy models`, `/api/tags`, `/models`). There is no built-in model list, and no model name is hard-coded. A cloud provider with no key makes no request at all.
 
-## Limits of 0.1.0
+## Agent skill (letters across sources)
 
-- It reads the vault that is open. Other vaults by path, and Notion, are not part of this version.
+The plugin reads the open vault only, by design. For a letter across several sources (Obsidian, Notion, other note apps you connected), use the **`mind-letter` agent skill** in [`skill/mind-letter/`](skill/mind-letter/). It follows the same rules and memory format as the plugin and runs in an AI agent that can read your notes.
+
+- **Claude Code:** copy `skill/mind-letter` to `~/.claude/skills/mind-letter`, then ask: "write this week's mind letter from my vault".
+- **Other agents with skill support** (e.g. Codex): copy the folder into that agent's skills folder.
+- The skill only reads sources your agent can already reach (folder access or connectors). It asks once where to save the letter.
+
+## Limits
+
+- The plugin reads the vault that is open, by design. For other vaults and Notion, use the agent skill above.
 - Contradictions need an exact quote plus a second quote or a measured count. If the rules cannot back it up, that section is simply missing.
 - Counts of "saved vs own" are estimates from folders, size and front matter; the letter says so.
 

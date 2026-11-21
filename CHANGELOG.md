@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.1
+
+- Added the `mind-letter` agent skill in `skill/mind-letter/` (SKILL.md, insight rules, letter template, memory format, synthetic example) for letters across several sources (Obsidian, Notion, other connected note apps). Same rules and memory format as the plugin.
+- README (English and Indonesian): new "Agent skill" section with install steps; the plugin reading only the open vault is now stated as a design choice.
+- No change to the plugin code.
+
 ## 0.1.0
 
 First release.
