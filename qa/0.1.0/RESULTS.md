@@ -1,0 +1,24 @@
+# QA 0.1.0 (isolated Obsidian, synthetic vault)
+
+- PASS Q1-load: plugin version in Obsidian: 0.1.0
+- PASS Q1-commands: commands: mind-letter:write-letter, mind-letter:open-latest, mind-letter:warmup
+- PASS Q2-off-letter: files: 2026-W47.md; sections 5; checkboxes 5; links 19; generated-by basic mode: true
+- PASS Q3-no-network: external requests with AI off: 0 
+- PASS Q2-notice: notices: ["Mind Letter: reading your notes…","Mind Letter: letter saved to Mind Letter/2026-W47.md"]
+- PASS Q2-opens-letter: active file: Mind Letter/2026-W47.md
+- PASS Q4-memory: memory files: claims.json, feedback.json, meta.json, themes.json; claims: 6
+- PASS Q5-feedback: letters: 2026-W47 (2).md, 2026-W47.md (existing letter kept, numbered copy added); feedback entries: [{"week":"2026-W47","item":1,"useful":true},{"week":"2026-W47","item":2,"useful":false},{"week":"2026-W47","item":3,"useful":false},{"week":"2026-W47","item":4,"useful":false},{"week":"2026-W47","item":5,"useful":false}]
+- PASS Q6-settings-render: Letter // Language of the letter | Automatic (follow my notes) | Bahasa Indonesia | English // Folder for letters | Letters are written as YYYY-Www.md. The memory (claims, themes, feedback) lives in a hidden .memory folder inside it. // Folders to ignore | One folder per line (for example a private journal). Their notes are never read. // Write a letter every week | Off by default: the plugin writes only when you ask. When on, it writes the letter once Obsidian is open after the chosen time. // DaySundayMondayTuesdayWednesdayThursdayFridaySaturdaySunday // Hour (0-23)19 // Privacy | Without AI the plugin sends nothing anywhere and runs no program: it only reads your notes and writes the letter and the memory in your vault. See the README for what happens when you turn AI on. // AI (optional) // AI | The letter is useful without AI. With AI on, the model only rewords the findings the rules already made; anything it invents is rejected. It never sees whole notes, only the short quotes and titles that are already in the letter. | Off | Installed CLI | Local model | Cloud API
+- PASS Q6-settings-no-network: external requests when opening settings: 0
+- PASS Q6-default-off: saved ai: "(defaults)"
+- PASS Q7-claude-detect: Check connection and detect models | Connected · 32 models available | Check connection and detect models
+- PASS Q7-codex-detect-only: Detect only — not yet supported for running letters | Detect only: `codex exec --help` has no flag that disables ALL tools (only per-feature `--disable`, a list that changes between versions). // Check connection and detect models | Connected · 10 models available · Detect only — not yet supported for running letters | Check connection and detect models
+- PASS Q7-agy-detect-only: Detect only — not yet supported for running letters | Detect only: in real tests `agy` still wrote files and read files outside its workspace even with --sandbox and a restrictive --settings. // Check connection and detect models | Connected · 23 models available · Detect only — not yet supported for running letters | Check connection and detect models
+- PASS Q7-gemini-detect-only: Detect only — not yet supported for running letters | Detect only: Gemini CLI could not be checked for a verified way to disable all tools. // Check connection and detect models | Not connected · Unavailable | Check connection and detect models
+- PASS Q7-local: status: Check connection and detect models | Not connected · Unavailable | Check connection and detect models; requests: (none visible)
+- PASS Q7-api-no-key: status: API key | The key is stored in this plugin's data.json as plain text and is synced if you sync your vault. // Check connection and detect models | Not connected · API key required | Check connection and detect models // Model | Picked from the models the provider itself reports. | — No models detected (enter API key) —; requests: 0
+- PASS Q8-not-approved: notices: ["Ollama is not connected (Not connected · Unavailable)","OpenAI is not connected (Not connected · API key required)","Mind Letter: AI is on but this provider is not approved yet; the letter was written without AI."]
+- PASS Q9-claude-letter: letter written: 2026-W47.md; reworded by AI: true; notices: ["Mind Letter: AI is on but this provider is not approved yet; the letter was written without AI.","Mind Letter: letter saved to Mind Letter/2026-W47.md (AI: 5 parts reworded)"]
+- PASS Q10-schedule-off: autoWeekly off, plugin reloaded: letters written: 0
+- PASS Q10-schedule-on: autoWeekly on (today, hour 0), plugin reloaded: letters: 2026-W47.md
+- PASS Q10-no-duplicate: after another reload the same week is not written twice: 1 letter(s)

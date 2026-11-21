@@ -10,3 +10,4 @@ data.json
 qa/_vault/
 qa/_profile/
 .test-build/
+qa/*/screenshots/

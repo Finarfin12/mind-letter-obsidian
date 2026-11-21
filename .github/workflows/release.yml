@@ -1,0 +1,45 @@
+name: Release
+
+# Triggered by a version tag without a "v" prefix, e.g. 0.1.0. The tag MUST equal "version" in manifest.json.
+on:
+  push:
+    tags:
+      - "*"
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      # Tag = manifest version, and manifest/package/package-lock/versions.json/CHANGELOG agree. Release notes = this version's CHANGELOG section.
+      - name: Check release files
+        run: node scripts/check-release.mjs "${GITHUB_REF_NAME}" --notes release-notes.md
+      - run: npm test
+      - run: npm run lint
+      - run: npm run build
+      - name: Check release assets
+        run: |
+          for f in main.js manifest.json styles.css; do [ -s "$f" ] || { echo "Missing release asset $f"; exit 1; }; done
+      - name: Attest release assets
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            main.js
+            manifest.json
+            styles.css
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" main.js manifest.json styles.css \
+            --title "${GITHUB_REF_NAME}" --notes-file release-notes.md

@@ -215,8 +215,10 @@ export class MindLetterSettingTab extends PluginSettingTab {
 		const t = this.plugin.t;
 		const r = this.result;
 		if (!r) return t("model.none");
-		if (r.detectOnly) return `${t("model.ok", { n: r.models.length })} · ${t("model.detectOnly")}`;
-		if (r.connected) return r.models.length > 0 ? t("model.ok", { n: r.models.length }) : t("model.ok0");
+		if (r.connected) {
+			const ok = r.models.length > 0 ? t("model.ok", { n: r.models.length }) : t("model.ok0");
+			return r.detectOnly ? `${ok} · ${t("model.detectOnly")}` : ok;
+		}
 		switch (r.status) {
 			case "desktopOnly":
 				return t("model.desktopOnly");

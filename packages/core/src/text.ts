@@ -89,7 +89,8 @@ export function sentences(markdown: string): string[] {
 		if (/^\s*>/.test(raw)) continue;
 		const line = raw.replace(/^\s*(?:[-*+]\s+(?:\[[ xX]\]\s+)?|\d+[.)]\s+)/, "").trim();
 		if (line === "" || /^#{1,6}\s/.test(line)) continue;
-		const parts = line.split(/(?<=[.!?])\s+/);
+		// split after . ! ? (no lookbehind: it is not supported on iOS before 16.4)
+		const parts = line.replace(/([.!?])\s+/g, "$1\u0001").split("\u0001");
 		for (const p of parts) {
 			const s = p.trim();
 			if (s.length >= 12) out.push(s);
