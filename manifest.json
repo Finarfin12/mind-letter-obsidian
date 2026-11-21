@@ -1,7 +1,7 @@
 {
 	"id": "mind-letter",
 	"name": "Mind Letter",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"minAppVersion": "1.8.7",
 	"description": "Write a weekly letter from your own notes: connections, contradictions, direction and one question. Works without AI.",
 	"author": "Finarfin12",

@@ -56,9 +56,17 @@ Penyedia AI, sesuai urutan di pengaturan:
 
 Daftar model berasal dari penyedia itu sendiri (`--help`, file CLI-nya, `agy models`, `/api/tags`, `/models`). Tidak ada daftar model bawaan, dan tidak ada nama model yang ditulis permanen di kode. Penyedia cloud tanpa kunci tidak membuat permintaan sama sekali.
 
-## Batas versi 0.1.0
+## Skill agen (surat lintas sumber)
 
-- Ia membaca vault yang sedang terbuka. Vault lain lewat path, dan Notion, belum termasuk versi ini.
+Plugin sengaja hanya membaca vault yang sedang terbuka. Untuk surat lintas beberapa sumber (Obsidian, Notion, aplikasi catatan lain yang tersambung), pakai **skill agen `mind-letter`** di [`skill/mind-letter/`](skill/mind-letter/). Aturan dan format memorinya sama dengan plugin, dan dijalankan oleh agen AI yang bisa membaca catatanmu.
+
+- **Claude Code:** salin `skill/mind-letter` ke `~/.claude/skills/mind-letter`, lalu minta: "buat mind letter minggu ini dari vault-ku".
+- **Agen lain yang mendukung skill** (mis. Codex): salin foldernya ke folder skill agen tersebut.
+- Skill hanya membaca sumber yang memang sudah bisa dijangkau agenmu (akses folder atau konektor). Ia bertanya sekali di mana surat disimpan.
+
+## Batas
+
+- Plugin sengaja hanya membaca vault yang sedang terbuka. Untuk vault lain dan Notion, pakai skill agen di atas.
 - Pertentangan butuh satu kutipan persis plus kutipan kedua atau hitungan terukur. Kalau aturan tidak bisa membuktikannya, bagian itu tidak muncul.
 - Hitungan "disimpan vs ditulis sendiri" adalah perkiraan dari folder, ukuran, dan front matter; surat menyebutnya begitu.
 
