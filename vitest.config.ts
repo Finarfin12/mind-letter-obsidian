@@ -6,6 +6,7 @@ export default defineConfig({
 		alias: {
 			obsidian: resolve(import.meta.dirname, "tests/obsidian-mock.ts"),
 			"@mind-letter/core": resolve(import.meta.dirname, "packages/core/src/index.ts"),
+			"@mind-letter/ai": resolve(import.meta.dirname, "packages/ai/src/index.ts"),
 		},
 	},
 	test: {

@@ -16,10 +16,11 @@
 		"allowSyntheticDefaultImports": true,
 		"baseUrl": ".",
 		"paths": {
-			"@mind-letter/core": ["packages/core/src/index.ts"]
+			"@mind-letter/core": ["packages/core/src/index.ts"],
+			"@mind-letter/ai": ["packages/ai/src/index.ts"]
 		},
 		"types": [],
 		"lib": ["ES2021", "DOM"]
 	},
-	"include": ["src/**/*.ts", "packages/core/src/**/*.ts"]
+	"include": ["src/**/*.ts", "packages/core/src/**/*.ts", "packages/ai/src/**/*.ts"]
 }
