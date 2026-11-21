@@ -17,6 +17,7 @@ import type MindLetterPlugin from "./main";
 import { ApproveModal } from "./approve-modal";
 import { buildProviderDeps } from "./ai-glue";
 import type { LanguageSetting } from "./settings";
+import { runAsync } from "./run-async";
 import { resolveVisible, type SettingGroupDef, type SettingItemDef } from "./settingDefinitions";
 
 const CLI_NAMES: Record<CliTool, string> = { claude: "Claude Code", codex: "Codex", gemini: "Gemini CLI", agy: "Antigravity (agy)" };
@@ -29,6 +30,11 @@ export class MindLetterSettingTab extends PluginSettingTab {
 
 	constructor(app: App, private readonly plugin: MindLetterPlugin) {
 		super(app, plugin);
+	}
+
+	/** Run an async handler from a callback that must return void; a failure becomes a Notice instead of an unhandled rejection. */
+	private run(fn: () => Promise<void>): void {
+		runAsync(fn, e => new Notice(this.plugin.t("notice.saveFailed", { error: e instanceof Error ? e.message : "unknown" })));
 	}
 
 	/** Declarative settings (Obsidian 1.13+ lists them in its settings search). display() renders the same groups on older versions. */
@@ -62,43 +68,45 @@ export class MindLetterSettingTab extends PluginSettingTab {
 							.addOption("id", "Bahasa Indonesia")
 							.addOption("en", "English")
 							.setValue(s.language)
-							.onChange(async v => {
+							.onChange(v => this.run(async () => {
 								s.language = v as LanguageSetting;
 								await save();
-							}),
+							})),
 					),
 				),
 				item("folder", t("set.folder"), st => st.addText(x =>
-					x.setValue(s.letterFolder).onChange(async v => {
+					x.setValue(s.letterFolder).onChange(v => this.run(async () => {
 						s.letterFolder = v.trim().replace(/^\/+|\/+$/g, "") || "Mind Letter";
 						await save();
-					}),
+					})),
 				), { desc: t("set.folder.desc") }),
 				item("excluded", t("set.excluded"), st => st.addTextArea(x =>
-					x.setValue(s.excludedFolders.join("\n")).onChange(async v => {
+					x.setValue(s.excludedFolders.join("\n")).onChange(v => this.run(async () => {
 						s.excludedFolders = v.split(/\r?\n/).map(l => l.trim().replace(/^\/+|\/+$/g, "")).filter(Boolean);
 						await save();
-					}),
+					})),
 				), { desc: t("set.excluded.desc") }),
 				item("auto", t("set.auto"), st => st.addToggle(x =>
-					x.setValue(s.autoWeekly).onChange(async v => {
+					x.setValue(s.autoWeekly).onChange(v => this.run(async () => {
 						s.autoWeekly = v;
 						await save();
 						redraw();
-					}),
+					})),
 				), { desc: t("set.auto.desc") }),
 				item("weekday", t("set.weekday"), st => st.addDropdown(d => {
-					this.plugin.weekdayNames().forEach((name, i) => d.addOption(String(i), name));
-					d.setValue(String(s.weekday)).onChange(async v => {
+					this.plugin.weekdayNames().forEach((name, i) => {
+						d.addOption(String(i), name);
+					});
+					d.setValue(String(s.weekday)).onChange(v => this.run(async () => {
 						s.weekday = Number(v);
 						await save();
-					});
+					}));
 				}), { visible: () => s.autoWeekly }),
 				item("hour", t("set.hour"), st => st.addSlider(x =>
-					x.setLimits(0, 23, 1).setValue(s.hour).setDynamicTooltip().onChange(async v => {
+					x.setLimits(0, 23, 1).setValue(s.hour).setDynamicTooltip().onChange(v => this.run(async () => {
 						s.hour = v;
 						await save();
-					}),
+					})),
 				), { visible: () => s.autoWeekly }),
 				item("privacy", t("set.privacy"), () => {}, { desc: t("set.privacy.desc") }),
 			],
@@ -117,53 +125,59 @@ export class MindLetterSettingTab extends PluginSettingTab {
 							.addOption("local", t("set.ai.local"))
 							.addOption("api", t("set.ai.api"))
 							.setValue(ai.provider)
-							.onChange(async v => {
+							.onChange(v => this.run(async () => {
 								ai.provider = v as ProviderMode;
 								this.result = null;
 								await save();
 								redraw();
-							}),
+							})),
 					), { desc: t("set.ai.help") }),
 				item("ai-cli", t("set.ai.source"), st => st.addDropdown(d => {
-					(Object.keys(CLI_NAMES) as CliTool[]).forEach(k => d.addOption(k, CLI_NAMES[k]));
-					d.setValue(ai.cli).onChange(async v => {
+					(Object.keys(CLI_NAMES) as CliTool[]).forEach(k => {
+						d.addOption(k, CLI_NAMES[k]);
+					});
+					d.setValue(ai.cli).onChange(v => this.run(async () => {
 						ai.cli = v as CliTool;
 						await resetModel();
-					});
+					}));
 				}), { visible: isCli }),
 				item("ai-cli-note", t("model.detectOnly"), () => {}, { visible: () => isCli() && !!CLI_SPECS[ai.cli].detectOnly, desc: CLI_SPECS[ai.cli].detectOnly ?? "" }),
 				item("ai-local", t("set.ai.source"), st => st.addDropdown(d => {
-					(Object.keys(LOCAL_NAMES) as LocalKind[]).forEach(k => d.addOption(k, LOCAL_NAMES[k]));
-					d.setValue(ai.local).onChange(async v => {
+					(Object.keys(LOCAL_NAMES) as LocalKind[]).forEach(k => {
+						d.addOption(k, LOCAL_NAMES[k]);
+					});
+					d.setValue(ai.local).onChange(v => this.run(async () => {
 						ai.local = v as LocalKind;
 						await resetModel();
-					});
+					}));
 				}), { visible: isLocal }),
 				item("ai-local-url", t("set.ai.url"), st => st.addText(x =>
-					x.setPlaceholder(LOCAL_DEFAULT_BASE[ai.local]).setValue(ai.localUrl).onChange(async v => {
+					x.setPlaceholder(LOCAL_DEFAULT_BASE[ai.local]).setValue(ai.localUrl).onChange(v => this.run(async () => {
 						ai.localUrl = v.trim();
 						await save();
-					}),
+					})),
 				), { visible: isLocal }),
 				item("ai-api", t("set.ai.source"), st => st.addDropdown(d => {
-					(Object.keys(API_NAMES) as ApiKind[]).forEach(k => d.addOption(k, API_NAMES[k]));
-					d.setValue(ai.api).onChange(async v => {
+					(Object.keys(API_NAMES) as ApiKind[]).forEach(k => {
+						d.addOption(k, API_NAMES[k]);
+					});
+					d.setValue(ai.api).onChange(v => this.run(async () => {
 						ai.api = v as ApiKind;
 						await resetModel();
-					});
+					}));
 				}), { visible: isApi }),
 				item("ai-api-url", t("set.ai.url"), st => st.addText(x =>
-					x.setPlaceholder(API_DEFAULT_BASE[ai.api]).setValue(ai.apiUrl).onChange(async v => {
+					x.setPlaceholder(API_DEFAULT_BASE[ai.api]).setValue(ai.apiUrl).onChange(v => this.run(async () => {
 						ai.apiUrl = v.trim();
 						await save();
-					}),
+					})),
 				), { visible: isApi }),
 				item("ai-key", t("set.ai.key"), st => st.addText(x => {
 					x.inputEl.type = "password";
-					x.setValue(ai.apiKey).onChange(async v => {
+					x.setValue(ai.apiKey).onChange(v => this.run(async () => {
 						ai.apiKey = v.trim();
 						await save();
-					});
+					}));
 				}), { visible: isApi, desc: t("set.ai.key.warn") }),
 				item("ai-check", t("set.ai.check"), st => st.addButton(b =>
 					b.setButtonText(this.checking ? t("set.ai.checking") : t("set.ai.check")).setDisabled(this.checking).onClick(() => void this.check()),
@@ -174,21 +188,21 @@ export class MindLetterSettingTab extends PluginSettingTab {
 					d.addOption("", models.length > 0 ? t("model.default") : isApi() && ai.apiKey === "" ? t("model.placeholderKey") : t("model.placeholder"));
 					if (ai.model && !models.includes(ai.model)) d.addOption(ai.model, t("model.saved", { name: ai.model }));
 					for (const m of models) d.addOption(m, labels[m] ? `${labels[m]} (${m})` : m);
-					d.setValue(ai.model).onChange(async v => {
+					d.setValue(ai.model).onChange(v => this.run(async () => {
 						ai.model = v;
 						await save();
-					});
+					}));
 				}), { visible: aiOn, desc: t("set.ai.model.desc") }),
 				item("ai-approve", t("set.ai.approve"), st => {
 					const approved = ai.approvedSlot !== "" && ai.approvedSlot === providerSlot(ai);
 					st.setDesc(approved ? t("set.ai.approved") : t("set.ai.approve.desc"));
 					st.addButton(b =>
-						b.setButtonText(approved ? t("set.ai.revoke") : t("set.ai.approve.btn")).onClick(async () => {
+						b.setButtonText(approved ? t("set.ai.revoke") : t("set.ai.approve.btn")).onClick(() => this.run(async () => {
 							if (approved) ai.approvedSlot = "";
 							else if (await this.askApproval()) ai.approvedSlot = providerSlot(ai);
 							await save();
 							redraw();
-						}),
+						})),
 					);
 				}, { visible: aiOn }),
 			],

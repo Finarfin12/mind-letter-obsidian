@@ -8,6 +8,7 @@ import { generateLetter, runWarmup } from "./generate";
 import { loadMemory } from "./memory-store";
 import { isWeeklyDue } from "./scheduler";
 import { buildProviderDeps } from "./ai-glue";
+import { runAsync } from "./run-async";
 
 const CHECK_EVERY_MS = 30 * 60 * 1000;
 
@@ -21,14 +22,19 @@ export default class MindLetterPlugin extends Plugin {
 		this.refreshLanguage();
 
 		this.addSettingTab(new MindLetterSettingTab(this.app, this));
-		this.addRibbonIcon("mail", this.t("ribbon"), () => void this.writeLetter(false));
-		this.addCommand({ id: "write-letter", name: this.t("cmd.generate"), callback: () => void this.writeLetter(false) });
-		this.addCommand({ id: "open-latest", name: this.t("cmd.open"), callback: () => void this.openLatest() });
-		this.addCommand({ id: "warmup", name: this.t("cmd.warmup"), callback: () => void this.warmup() });
+		this.addRibbonIcon("mail", this.t("ribbon"), () => this.run(() => this.writeLetter(false)));
+		this.addCommand({ id: "write-letter", name: this.t("cmd.generate"), callback: () => this.run(() => this.writeLetter(false)) });
+		this.addCommand({ id: "open-latest", name: this.t("cmd.open"), callback: () => this.run(() => this.openLatest()) });
+		this.addCommand({ id: "warmup", name: this.t("cmd.warmup"), callback: () => this.run(() => this.warmup()) });
 
 		// The weekly timer only exists while "write a letter every week" is on; with it off the plugin never writes by itself.
-		this.registerInterval(window.setInterval(() => void this.maybeWriteWeekly(), CHECK_EVERY_MS));
-		this.app.workspace.onLayoutReady(() => void this.maybeWriteWeekly());
+		this.registerInterval(window.setInterval(() => this.run(() => this.maybeWriteWeekly()), CHECK_EVERY_MS));
+		this.app.workspace.onLayoutReady(() => this.run(() => this.maybeWriteWeekly()));
+	}
+
+	/** Start async work from a void callback; a failure becomes a Notice. */
+	private run(fn: () => Promise<void>): void {
+		runAsync(fn, e => new Notice(this.t("notice.failed", { error: e instanceof Error ? e.message : "unknown" })));
 	}
 
 	async saveSettings(): Promise<void> {

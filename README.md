@@ -75,6 +75,8 @@ npm run lint
 npm run build  # type check + bundle main.js
 ```
 
+The lint step treats `no-misused-promises` and `no-floating-promises` as errors. Start async work from a callback that must return `void` with `runAsync(fn, onError)` (`src/run-async.ts`), never with a bare `async` callback.
+
 The logic is in two packages without any Obsidian import, so other front ends can reuse them: `packages/core` (`@mind-letter/core`: classify, claims, themes, insights, compose, memory, refinement checks) and `packages/ai` (`@mind-letter/ai`: provider detection, safety flags, providers). The plugin in `src/` is a thin layer over them.
 
 ## License
