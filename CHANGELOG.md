@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2
+
+- The `mind-letter` agent skill moved to its own repository, [Finarfin12/mind-letter-skill](https://github.com/Finarfin12/mind-letter-skill); the `skill/` folder is removed from this repository.
+- README (English and Indonesian): the "Agent skill" section now links to the skill repository.
+- No change to the plugin code.
+
 ## 0.1.1
 
 - Added the `mind-letter` agent skill in `skill/mind-letter/` (SKILL.md, insight rules, letter template, memory format, synthetic example) for letters across several sources (Obsidian, Notion, other connected note apps). Same rules and memory format as the plugin.

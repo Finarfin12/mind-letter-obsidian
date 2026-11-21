@@ -58,11 +58,7 @@ Model lists come from the provider itself (`--help`, the CLI's own files, `agy m
 
 ## Agent skill (letters across sources)
 
-The plugin reads the open vault only, by design. For a letter across several sources (Obsidian, Notion, other note apps you connected), use the **`mind-letter` agent skill** in [`skill/mind-letter/`](skill/mind-letter/). It follows the same rules and memory format as the plugin and runs in an AI agent that can read your notes.
-
-- **Claude Code:** copy `skill/mind-letter` to `~/.claude/skills/mind-letter`, then ask: "write this week's mind letter from my vault".
-- **Other agents with skill support** (e.g. Codex): copy the folder into that agent's skills folder.
-- The skill only reads sources your agent can already reach (folder access or connectors). It asks once where to save the letter.
+The plugin reads the open vault only, by design. For a letter across several sources (Obsidian, Notion, other note apps you connected), use the separate **Mind Letter agent skill**: [github.com/Finarfin12/mind-letter-skill](https://github.com/Finarfin12/mind-letter-skill). It follows the same rules and memory format as the plugin and runs in an AI agent that can read your notes (e.g. Claude Code, Codex). Install steps are in that repository.
 
 ## Limits
 
