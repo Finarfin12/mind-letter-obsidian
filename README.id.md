@@ -58,11 +58,7 @@ Daftar model berasal dari penyedia itu sendiri (`--help`, file CLI-nya, `agy mod
 
 ## Skill agen (surat lintas sumber)
 
-Plugin sengaja hanya membaca vault yang sedang terbuka. Untuk surat lintas beberapa sumber (Obsidian, Notion, aplikasi catatan lain yang tersambung), pakai **skill agen `mind-letter`** di [`skill/mind-letter/`](skill/mind-letter/). Aturan dan format memorinya sama dengan plugin, dan dijalankan oleh agen AI yang bisa membaca catatanmu.
-
-- **Claude Code:** salin `skill/mind-letter` ke `~/.claude/skills/mind-letter`, lalu minta: "buat mind letter minggu ini dari vault-ku".
-- **Agen lain yang mendukung skill** (mis. Codex): salin foldernya ke folder skill agen tersebut.
-- Skill hanya membaca sumber yang memang sudah bisa dijangkau agenmu (akses folder atau konektor). Ia bertanya sekali di mana surat disimpan.
+Plugin sengaja hanya membaca vault yang sedang terbuka. Untuk surat lintas beberapa sumber (Obsidian, Notion, aplikasi catatan lain yang tersambung), pakai **skill agen Mind Letter** yang terpisah: [github.com/Finarfin12/mind-letter-skill](https://github.com/Finarfin12/mind-letter-skill). Aturan dan format memorinya sama dengan plugin, dan dijalankan oleh agen AI yang bisa membaca catatanmu (mis. Claude Code, Codex). Cara pasangnya ada di repo tersebut.
 
 ## Batas
 
