@@ -6,7 +6,9 @@ import { join } from "node:path";
 import { launch, sleep, vault, profile, base, PORT, connect } from "./obs.mjs";
 import { makeVault } from "./make-vault.mjs";
 
-const SRC = "C:/Users/atrione/OpenBot/Shared/seedbed-qa-083";
+// An empty Obsidian profile + vault skeleton (app.json, appearance.json, core-plugins.json) to start from; set MINDLETTER_QA_BASE.
+const SRC = process.env.MINDLETTER_QA_BASE;
+if (!SRC) throw new Error("Set MINDLETTER_QA_BASE to a folder with profile/ and vault/.obsidian/ from a clean Obsidian profile");
 const root = join(tmpdir(), "mind-letter-qa-010");
 const out = join(base, "qa", "0.1.0");
 const shots = join(out, "screenshots");
