@@ -1,0 +1,33 @@
+{
+	"name": "mind-letter",
+	"version": "0.1.0",
+	"description": "A weekly letter from your own notes: connections, contradictions, direction, and one question.",
+	"main": "main.js",
+	"type": "module",
+	"scripts": {
+		"dev": "node esbuild.config.mjs",
+		"build": "tsc -noEmit -skipLibCheck && tsc -p tsconfig.tests.json -noEmit -skipLibCheck && node esbuild.config.mjs production",
+		"test": "vitest run",
+		"lint": "eslint .",
+		"check-release": "node scripts/check-release.mjs",
+		"version": "node version-bump.mjs && git add manifest.json versions.json"
+	},
+	"keywords": [
+		"obsidian",
+		"plugin",
+		"weekly-review"
+	],
+	"license": "MIT",
+	"devDependencies": {
+		"@eslint/js": "9.39.5",
+		"@types/node": "^22.15.17",
+		"esbuild": "0.25.5",
+		"eslint": "9.39.5",
+		"eslint-plugin-obsidianmd": "0.5.1",
+		"obsidian": "1.8.7",
+		"typescript": "^5.8.3",
+		"typescript-eslint": "8.72.2",
+		"vite": "6.4.6",
+		"vitest": "5.1.0"
+	}
+}

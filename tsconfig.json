@@ -1,0 +1,25 @@
+{
+	"compilerOptions": {
+		"inlineSourceMap": true,
+		"inlineSources": true,
+		"module": "ESNext",
+		"target": "ES2021",
+		"strict": true,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedIndexedAccess": true,
+		"moduleResolution": "bundler",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"allowSyntheticDefaultImports": true,
+		"baseUrl": ".",
+		"paths": {
+			"@mind-letter/core": ["packages/core/src/index.ts"]
+		},
+		"types": [],
+		"lib": ["ES2021", "DOM"]
+	},
+	"include": ["src/**/*.ts", "packages/core/src/**/*.ts"]
+}

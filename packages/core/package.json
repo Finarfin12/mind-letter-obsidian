@@ -1,0 +1,10 @@
+{
+	"name": "@mind-letter/core",
+	"version": "0.1.0",
+	"description": "Mind Letter core: pure TypeScript (no I/O) that turns note records into a weekly letter. Shared by the Obsidian plugin and the local newsletter app.",
+	"private": true,
+	"type": "module",
+	"main": "src/index.ts",
+	"types": "src/index.ts",
+	"license": "MIT"
+}

@@ -1,0 +1,27 @@
+name: Test
+
+# Test and build the plugin; no release is created.
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  plugin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      # Versi di manifest.json, package.json, package-lock.json, versions.json dan CHANGELOG harus sama.
+      - run: node scripts/check-release.mjs
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+

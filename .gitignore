@@ -1,0 +1,12 @@
+node_modules
+main.js
+*.map
+data.json
+.DS_Store
+.vscode
+.idea
+
+# local QA artifacts
+qa/_vault/
+qa/_profile/
+.test-build/
